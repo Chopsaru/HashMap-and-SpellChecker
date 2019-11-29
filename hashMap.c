@@ -148,7 +148,7 @@ int* hashMapGet(HashMap* map, const char* key)
 
 	while (cur != NULL) {
 		if (strcmp(cur->key, key) == 0) {
-			return &cur->value;
+			return &(cur->value);
 		}
 		cur = cur->next;
 	}
@@ -223,6 +223,7 @@ void hashMapPut(HashMap* map, const char* key, int value)
 	}
 
 	if (hashMapTableLoad(map) >= MAX_TABLE_LOAD) {
+		//printf("Table load %f, resizing.\n", hashMapTableLoad(map));
 		resizeTable(map, 2 * hashMapCapacity(map));
 	}
 }
@@ -237,19 +238,27 @@ void hashMapPut(HashMap* map, const char* key, int value)
 void hashMapRemove(HashMap* map, const char* key)
 {
 	assert(map != NULL);
+	assert(key != NULL);
 	
 	int index = HASH_FUNCTION(key) % (hashMapCapacity(map));
 	if (index < 0) { index += hashMapCapacity(map); }
 
 	if (hashMapContainsKey(map, key)) {
+
 		HashLink* cur = map->table[index];
-		if (strcmp(cur->key, key) == 0) { map->table[index] = cur->next; }
+
+		if (strcmp(cur->key, key) == 0) { 
+			map->table[index] = cur->next; 
+			map->size--;
+		}
 		else {
 			while (cur->next != NULL) {
+
 				if (strcmp(cur->next->key, key) == 0) {
-					HashLink* temp = cur->next;
-					hashLinkDelete(cur);
-					cur = temp;
+
+					HashLink* temp = cur->next->next;
+					hashLinkDelete(cur->next);
+					cur->next = temp;
 					map->size--;
 				}
 				else {
@@ -259,7 +268,6 @@ void hashMapRemove(HashMap* map, const char* key)
 		}
 		
 	}
-
 }
 
 /**

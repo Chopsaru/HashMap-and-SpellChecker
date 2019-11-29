@@ -54,7 +54,13 @@ char* nextWord(FILE* file)
  */
 void loadDictionary(FILE* file, HashMap* map)
 {
-    // FIXME: implement
+	char* curWord = nextWord(file);
+
+	while (curWord != NULL) {
+		hashMapPut(map, curWord, 1);
+		free(curWord);
+		curWord = nextWord(file);
+	}
 }
 
 /**
