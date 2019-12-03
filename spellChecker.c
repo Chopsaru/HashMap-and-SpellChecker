@@ -140,9 +140,9 @@ int main(int argc, const char** argv)
 			while(hashMapSize(suggestions) < 5){
 				for (int i = 0; i < hashMapCapacity(map); i++) {
 					HashLink* cur = map->table[i];
-					int wordDist = levenshtein(inputBuffer, cur->key);
 
 					while (cur != NULL) {
+						int wordDist = levenshtein(inputBuffer, cur->key);
 						hashMapPut(map, cur->key, wordDist);
 						if (wordDist = minDist) {
 							hashMapPut(suggestions, cur->key, wordDist);
