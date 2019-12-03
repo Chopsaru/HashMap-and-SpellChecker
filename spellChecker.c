@@ -144,7 +144,7 @@ int main(int argc, const char** argv)
 					while (cur != NULL) {
 						int wordDist = levenshtein(inputBuffer, cur->key);
 						hashMapPut(map, cur->key, wordDist);
-						if (wordDist = minDist) {
+						if (wordDist == minDist) {
 							hashMapPut(suggestions, cur->key, wordDist);
 						}
 						cur = cur->next;
@@ -154,13 +154,13 @@ int main(int argc, const char** argv)
 			}
 
 			//print suggestions
+			int sugNum = 0;
 			for (int i = 0; i < hashMapCapacity(suggestions); i++) {
-				HashLink* cur = map->table[i];
-				if (cur != NULL) {
-					while (cur != NULL) {
-						printf("%s \n ", cur->key);
-						cur = cur->next;
-					}
+				HashLink* cur = suggestions->table[i];
+				while (cur != NULL && sugNum < 5) {
+					printf("%s \n", cur->key);
+					cur = cur->next;
+					sugNum++;
 				}
 			}
 		}
